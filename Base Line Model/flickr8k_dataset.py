@@ -5,26 +5,24 @@ from torch.utils.data import Dataset
 from vocabulary import Vocabulary
 
 class Flickr8kDataset(Dataset):
-    def __init__(self,root_dir,captions_file,images_file,
+    def __init__(self,root_dir,captions_file,
                  transform=None,freq_threshold=5):
         
         self.root_dir=root_dir
         self.transform=transform
         
-        # splitting image filenames 
-        with open (images_file,"r") as f:
-            self.images=set(f.read().strip().split("\n"))
-            
-        self.images_caption_pairs=[]
+        self.image_captions_pairs=[]
         captions=[]
         
-        with open(captions_file,"r") as f:
+        # splitting image filenames 
+        with open (captions_file,"r") as f:
             for line in f:
                 img,caption=line.strip().split(",",1)
-                if img in self.images:
-                    caption=caption.lower().strip()
-                    self.images_caption_pairs.append((img,caption))
-                    captions.append(caption)
+                
+                caption=caption.lower().strip()
+                self.image_captions_pairs.append((img,caption))
+                captions.append(caption)
+
                     
         self.vocab=Vocabulary(freq_threshold)
         self.vocab.build_vocabulary(captions)
