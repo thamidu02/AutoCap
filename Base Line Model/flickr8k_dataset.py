@@ -39,3 +39,16 @@ class Flickr8kDataset(Dataset):
         img_path=os.path.join(self.root_dir,img_name)
         image=Image.open(img_path).convert("RGB")
         
+        if self.transform:
+            image=self.transform(image)
+            
+        
+        numericalized_caption=(
+            [self.vocab.stoi["<start>"]]+
+            self.vocab.numericalize(caption)+
+            [self.vocab.stoi["<end>"]]
+        )
+        
+
+        return image,torch.tensor(numericalized_caption)
+        
