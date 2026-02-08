@@ -17,11 +17,17 @@ class Flickr8kDataset(Dataset):
         # splitting image filenames 
         with open (captions_file,"r") as f:
             for line in f:
-                img,caption=line.strip().split(",",1)
+                line=line.strip()
                 
+                if not line or "," not in line:
+                    continue
+                
+                img,caption=line.split(",",1)
                 caption=caption.lower().strip()
+                
                 self.image_captions_pairs.append((img,caption))
-                captions.append(caption)
+                captions.append(caption)                
+
 
                     
         self.vocab=Vocabulary(freq_threshold)
